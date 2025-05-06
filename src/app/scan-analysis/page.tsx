@@ -18,7 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScanUploader } from "@/components/scan-uploader";
 import { Progress } from "@/components/ui/progress";
 import { useCustomToast } from "@/hooks/useCustomToast";
-import { Label } from "@/components/ui/label"; 
+import { MIN_SLICES } from "@/lib/utils";
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload");
@@ -39,6 +39,7 @@ export default function ScanAnalysisPage() {
   const [petImageUrls, setPetImageUrls] = useState<string[]>([]);
 
   // First effect to handle progress and state updates
+  // todo: implement calling the API
   useEffect(() => {
     if (isAnalyzing && processingProgress < 100) {
       const timer = setTimeout(() => {
@@ -57,6 +58,7 @@ export default function ScanAnalysisPage() {
   }, [isAnalyzing, processingProgress]);
 
   // Second effect to handle tab change and toast notification after analysis is complete
+  // todo: implement real logic
   useEffect(() => {
     if (
       analysisComplete &&
@@ -171,7 +173,7 @@ export default function ScanAnalysisPage() {
                   }}
                 />
               </CardContent>
-              <CardFooter className="text-xs text-muted-foreground">
+              <CardFooter className="text-xs text-black/60">
                 Supported format: DICOM
               </CardFooter>
             </Card>
@@ -198,7 +200,7 @@ export default function ScanAnalysisPage() {
                   }}
                 />
               </CardContent>
-              <CardFooter className="text-xs text-muted-foreground">
+              <CardFooter className="text-xs text-black/60">
                 Supported format: DICOM
               </CardFooter>
             </Card>
@@ -209,7 +211,7 @@ export default function ScanAnalysisPage() {
               <CardContent className="pt-6">
                 <div className="space-y-4 text-center">
                   <h3 className="text-lg font-semibold">Analyzing Scans</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-black/60">
                     Please wait while we analyze your scans. This may take a few
                     minutes.
                   </p>
@@ -243,18 +245,18 @@ export default function ScanAnalysisPage() {
               <div className="rounded-lg border border-lumina-100 p-6">
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-black/60">
                       Diagnostic Assessment:
                     </p>
                     <p className="text-3xl font-bold text-lumina-600">
                       Adenocarcinoma
                     </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-black/60">
                       Non-small cell lung cancer
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-black/60">
                       Confidence Level:
                     </p>
                     <div className="flex items-end gap-2">
@@ -272,11 +274,11 @@ export default function ScanAnalysisPage() {
                   Uploaded Scan Images
                 </h3>
                 <div className="grid gap-6 md:grid-cols-2">
-                  {ctImageUrls.length > 0 && (
+                  {ctImageUrls.length > MIN_SLICES && (
                     <div className="rounded-lg border border-lumina-100 overflow-hidden">
                       <div className="p-3 bg-lumina-50 flex justify-between items-center">
                         <h4 className="font-medium">CT Scan</h4>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-sm text-black/60">
                           Image {currentCtImageIndex + 1} of{" "}
                           {ctImageUrls.length}
                         </span>
@@ -349,7 +351,7 @@ export default function ScanAnalysisPage() {
                     <div className="rounded-lg border border-lumina-100 overflow-hidden">
                       <div className="p-3 bg-lumina-50 flex justify-between items-center">
                         <h4 className="font-medium">PET Scan</h4>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-sm text-black/60">
                           Image {currentPetImageIndex + 1} of{" "}
                           {petImageUrls.length}
                         </span>
@@ -419,7 +421,7 @@ export default function ScanAnalysisPage() {
                   )}
 
                   {ctImageUrls.length === 0 && petImageUrls.length === 0 && (
-                    <div className="col-span-2 rounded-lg border border-lumina-100 p-6 text-center text-muted-foreground">
+                    <div className="col-span-2 rounded-lg border border-lumina-100 p-6 text-center text-black/60">
                       No scan images were uploaded for this analysis.
                     </div>
                   )}

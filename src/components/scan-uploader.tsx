@@ -3,9 +3,9 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import { Upload, X, FileText, Check, ImageIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Upload, X, FileText, ImageIcon } from "lucide-react";
 import { useCustomToast } from "@/hooks/useCustomToast";
+import { MIN_SLICES } from "@/lib/utils";
 
 interface ScanUploaderProps {
   scanType: "CT" | "PET";
@@ -20,7 +20,6 @@ export function ScanUploader({
 }: ScanUploaderProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { showToast } = useCustomToast();
 
@@ -53,18 +52,15 @@ export function ScanUploader({
     if (e.dataTransfer.files) {
       const newFiles = Array.from(e.dataTransfer.files).filter(
         (file) =>
-          file.type.startsWith("image/") ||
-          file.name.endsWith(".dcm") ||
-          file.name.endsWith(".nii") ||
-          file.name.endsWith(".nii.gz")
+          file.name.endsWith(".dcm")
       );
 
-      if (newFiles.length > 0) {
+      if (newFiles.length > MIN_SLICES) {
         handleNewFiles(newFiles);
       } else {
         showToast({
-          title: "Invalid file type",
-          description: "Please upload image files or DICOM/NIfTI files.",
+          title: "Not enouch slices",
+          description: "Please upload at least 32 DICOM files.",
           variant: "destructive",
         });
       }
@@ -75,18 +71,15 @@ export function ScanUploader({
     if (e.target.files) {
       const newFiles = Array.from(e.target.files).filter(
         (file) =>
-          file.type.startsWith("image/") ||
-          file.name.endsWith(".dcm") ||
-          file.name.endsWith(".nii") ||
-          file.name.endsWith(".nii.gz")
+          file.name.endsWith(".dcm")
       );
 
-      if (newFiles.length > 0) {
+      if (newFiles.length > MIN_SLICES) {
         handleNewFiles(newFiles);
       } else {
         showToast({
-          title: "Invalid file type",
-          description: "Please upload image files or DICOM/NIfTI files.",
+          title: "Not enouch slices",
+          description: "Please upload at least 32 DICOM files.",
           variant: "destructive",
         });
       }
@@ -97,84 +90,21 @@ export function ScanUploader({
     setFiles(newFiles);
 
     // Create preview for the first image file
-    if (newFiles.length > 0) {
+    if (newFiles.length > MIN_SLICES) {
       newFiles.forEach((file, index) => {
-        if (file.type.startsWith("image/")) {
-          const url = URL.createObjectURL(file);
-          if (index === 0) {
-            setPreviewUrl(url);
-          }
-          if (onImageUrlChange) {
-            onImageUrlChange(url);
-          }
-        } else {
-          // For non-image files like DICOM, use a placeholder
-          const placeholderUrl = `/placeholder.svg?height=400&width=400&query=${scanType}%20scan%20preview%20${
-            index + 1
-          }`;
-          if (index === 0) {
-            setPreviewUrl(placeholderUrl);
-          }
-          if (onImageUrlChange) {
-            onImageUrlChange(placeholderUrl);
-          }
+        // todo: display parsed dicom but remove the forEach loop already
+        // For non-image files like DICOM, use a placeholder
+        const placeholderUrl = `/placeholder.svg?height=400&width=400&query=${scanType}%20scan%20preview%20${
+          index + 1
+        }`;
+        if (index === 0) {
+          setPreviewUrl(placeholderUrl);
         }
-      });
-
-      // Automatically confirm upload after a short delay
-      setIsUploading(true);
-      setTimeout(() => {
-        setIsUploading(false);
-        showToast({
-          title: "Upload successful",
-          description: `${newFiles.length} ${scanType} scan files have been uploaded.`,
-        });
-      }, 1000);
-    }
-  };
-
-  const removeFile = (index: number) => {
-    setFiles((prev) => {
-      const newFiles = prev.filter((_, i) => i !== index);
-
-      if (newFiles.length === 0) {
-        setPreviewUrl(null);
         if (onImageUrlChange) {
-          onImageUrlChange("");
+          onImageUrlChange(placeholderUrl);
         }
-      } else if (index === 0 && newFiles[0].type.startsWith("image/")) {
-        // Update preview if first file was removed
-        const url = URL.createObjectURL(newFiles[0]);
-        setPreviewUrl(url);
-        if (onImageUrlChange) {
-          onImageUrlChange(url);
-        }
-      }
-
-      return newFiles;
-    });
-  };
-
-  const confirmUpload = () => {
-    if (files.length === 0) {
-      showToast({
-        title: "No files selected",
-        description: "Please select files to upload.",
-        variant: "destructive",
       });
-      return;
     }
-
-    setIsUploading(true);
-
-    // Simulate upload process
-    setTimeout(() => {
-      setIsUploading(false);
-      showToast({
-        title: "Upload successful",
-        description: `${files.length} ${scanType} scan files have been uploaded.`,
-      });
-    }, 1000);
   };
 
   return (
@@ -196,7 +126,7 @@ export function ScanUploader({
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
             onChange={handleFileChange}
             multiple
-            accept="image/*,.dcm,.nii,.nii.gz"
+            accept=".dcm"
           />
           <div className="flex flex-col items-center justify-center space-y-2 text-center py-8">
             <div className="rounded-full bg-lumina-50 p-2">
@@ -215,7 +145,7 @@ export function ScanUploader({
       </div>
 
       {previewUrl && (
-        <div className="mt-4 rounded-lg border border-lumina-100 overflow-hidden">
+        <div className="mt-4 rounded-lg border border-red-100 overflow-hidden">
           <div className="aspect-square w-full relative">
             <img
               src={previewUrl || "/placeholder.svg"}
@@ -235,7 +165,7 @@ export function ScanUploader({
                 key={index}
                 className="flex items-center justify-between border-b p-2 last:border-0"
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex space-x-2">
                   {file.type.startsWith("image/") ? (
                     <ImageIcon className="h-4 w-4 text-lumina-600" />
                   ) : (
@@ -245,27 +175,8 @@ export function ScanUploader({
                     {file.name}
                   </span>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeFile(index)}
-                >
-                  <X className="h-4 w-4" />
-                  <span className="sr-only">Remove file</span>
-                </Button>
               </div>
             ))}
-          </div>
-          <div className="flex justify-end">
-            <Button
-              size="sm"
-              className="gap-1 bg-lumina-600 hover:bg-lumina-700"
-              onClick={confirmUpload}
-              disabled={isUploading}
-            >
-              <Check className="h-4 w-4" />
-              {isUploading ? "Uploading..." : "Confirm Upload"}
-            </Button>
           </div>
         </div>
       )}
