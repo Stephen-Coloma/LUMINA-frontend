@@ -6,17 +6,16 @@ import { useState, useEffect } from "react";
 import { Upload, X, FileText, ImageIcon } from "lucide-react";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { MIN_SLICES } from "@/lib/utils";
+import dicomToImage from "@/lib/dicom-parser";
 
 interface ScanUploaderProps {
   scanType: "CT" | "PET";
   onFilesChange?: (files: File[]) => void;
-  onImageUrlChange?: (url: string) => void;
 }
 
 export function ScanUploader({
   scanType,
   onFilesChange,
-  onImageUrlChange,
 }: ScanUploaderProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -27,13 +26,6 @@ export function ScanUploader({
     if (onFilesChange) {
       onFilesChange(files);
     }
-
-    // Clean up object URLs when component unmounts or files change
-    return () => {
-      if (previewUrl && previewUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
   }, [files, onFilesChange, previewUrl]);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -55,7 +47,7 @@ export function ScanUploader({
           file.name.endsWith(".dcm")
       );
 
-      if (newFiles.length > MIN_SLICES) {
+      if (newFiles.length >= MIN_SLICES) {
         handleNewFiles(newFiles);
       } else {
         showToast({
@@ -74,7 +66,7 @@ export function ScanUploader({
           file.name.endsWith(".dcm")
       );
 
-      if (newFiles.length > MIN_SLICES) {
+      if (newFiles.length >= MIN_SLICES) {
         handleNewFiles(newFiles);
       } else {
         showToast({
@@ -86,24 +78,18 @@ export function ScanUploader({
     }
   };
 
-  const handleNewFiles = (newFiles: File[]) => {
+  const handleNewFiles = async (newFiles: File[]) => {
     setFiles(newFiles);
 
     // Create preview for the first image file
-    if (newFiles.length > MIN_SLICES) {
-      newFiles.forEach((file, index) => {
-        // todo: display parsed dicom but remove the forEach loop already
-        // For non-image files like DICOM, use a placeholder
-        const placeholderUrl = `/placeholder.svg?height=400&width=400&query=${scanType}%20scan%20preview%20${
-          index + 1
-        }`;
-        if (index === 0) {
-          setPreviewUrl(placeholderUrl);
-        }
-        if (onImageUrlChange) {
-          onImageUrlChange(placeholderUrl);
-        }
-      });
+    if (newFiles.length >= MIN_SLICES) {
+      const firstFile = newFiles[0];
+
+      const formattedImage = await dicomToImage(firstFile);
+
+      if (formattedImage.startsWith("data:image/")) {
+          setPreviewUrl(formattedImage)
+      } 
     }
   };
 
@@ -113,7 +99,7 @@ export function ScanUploader({
         className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
           isDragging
             ? "border-lumina-600 bg-lumina-50"
-            : "border-muted-foreground/25"
+            : "border-black/25"
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -136,7 +122,7 @@ export function ScanUploader({
               <p className="text-sm font-medium">
                 Drag & drop {scanType} scan files
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-black/60">
                 or click to browse files
               </p>
             </div>
@@ -145,21 +131,24 @@ export function ScanUploader({
       </div>
 
       {previewUrl && (
-        <div className="mt-4 rounded-lg border border-red-100 overflow-hidden">
-          <div className="aspect-square w-full relative">
-            <img
-              src={previewUrl || "/placeholder.svg"}
-              alt={`${scanType} scan preview`}
-              className="w-full h-full object-cover"
-            />
+        <>
+          <h3 className="font-medium">First Slice Preview</h3>
+          <div className="mt-4 rounded-lg border border-red-100 overflow-hidden">
+            <div className="aspect-square w-full relative">
+              <img
+                src={previewUrl || "/placeholder.svg"}
+                alt={`${scanType} scan preview`}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
 
-      {files.length > 0 && (
+      {files.length >= MIN_SLICES && (
         <div className="space-y-2">
           <p className="text-sm font-medium">Uploaded Files ({files.length})</p>
-          <div className="max-h-40 overflow-y-auto rounded-lg border border-lumina-100">
+          <div className="max-h-80 overflow-y-auto rounded-lg border border-lumina-100">
             {files.map((file, index) => (
               <div
                 key={index}
