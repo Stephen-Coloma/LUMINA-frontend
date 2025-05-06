@@ -5,7 +5,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { Upload, X, FileText, ImageIcon } from "lucide-react";
 import { useCustomToast } from "@/hooks/useCustomToast";
-import { MIN_SLICES } from "@/lib/utils";
+import { MIN_SLICES } from "@/lib/constants";
 import dicomToImage from "@/lib/dicom-parser";
 
 interface ScanUploaderProps {
@@ -19,14 +19,14 @@ export function ScanUploader({
 }: ScanUploaderProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewImgSrc, setPreviewImgSrc] = useState<string | null>(null);
   const { showToast } = useCustomToast();
 
   useEffect(() => {
     if (onFilesChange) {
       onFilesChange(files);
     }
-  }, [files, onFilesChange, previewUrl]);
+  }, [files, onFilesChange, previewImgSrc]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -88,7 +88,7 @@ export function ScanUploader({
       const formattedImage = await dicomToImage(firstFile);
 
       if (formattedImage.startsWith("data:image/")) {
-          setPreviewUrl(formattedImage)
+          setPreviewImgSrc(formattedImage)
       } 
     }
   };
@@ -130,13 +130,13 @@ export function ScanUploader({
         </div>
       </div>
 
-      {previewUrl && (
+      {previewImgSrc && (
         <>
           <h3 className="font-medium">First Slice Preview</h3>
           <div className="mt-4 rounded-lg border border-red-100 overflow-hidden">
             <div className="aspect-square w-full relative">
               <img
-                src={previewUrl || "/placeholder.svg"}
+                src={previewImgSrc || "/placeholder.svg"}
                 alt={`${scanType} scan preview`}
                 className="w-full h-full object-cover"
               />

@@ -9,18 +9,18 @@ type AIData = {
 type APIResponse = {
     status: number, 
     statusText: string,
-    data: AIData
+    data?: AIData
     error: unknown
     loading: boolean
     executePostRequest: (dataToSend: any) => Promise<void>
     clearResponseState: () => void
 }
 
-export function usePost(url: string, options?: AxiosRequestConfig ): APIResponse {
+export const usePost = (url: string, options?: AxiosRequestConfig ): APIResponse => {
     const [status, setStatus] = useState<number>(0);
     const [statusText, setStatusText] = useState<string>('');
-    const [data, setData] = useState<any>(null);
-    const [error, setError] = useState<any>(null);
+    const [data, setData] = useState<AIData>();
+    const [error, setError] = useState<unknown>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
 
