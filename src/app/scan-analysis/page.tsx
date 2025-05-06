@@ -18,7 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScanUploader } from "@/components/scan-uploader";
 import { Progress } from "@/components/ui/progress";
 import { useCustomToast } from "@/hooks/useCustomToast";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/label"; 
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload");
