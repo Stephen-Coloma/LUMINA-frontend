@@ -50,6 +50,15 @@ export default function ScanAnalysisPage() {
       }, 0)
       return () => clearTimeout(timer)
     }
+
+    if(error){
+      showToast({
+        title: "Analysis Error",
+        description: "Something went wrong. Please try again later.",
+        variant: 'destructive'
+      })
+      return;
+    }
   }, [isAnalyzing])
 
   // useEffect that loads the images for CT for carousel

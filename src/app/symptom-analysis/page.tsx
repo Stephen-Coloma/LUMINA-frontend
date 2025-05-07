@@ -87,6 +87,15 @@ export default function SymptomAnalysisPage() {
       }, 0)
       return () => clearTimeout(timer)
     }
+
+    if(error){
+      showToast({
+        title: "Analysis Error",
+        description: "Something went wrong. Please try again later.",
+        variant: 'destructive'
+      })
+      return
+    }
   }, [isPredicting])
 
   return (
