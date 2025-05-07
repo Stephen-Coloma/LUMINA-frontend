@@ -10,14 +10,14 @@ export type AIData = {
 // todo: to be fixed to adjust with the data science payload
 /**Data that represents the data return by backend for Data Science subject */
 export type DSData = {
-    predictoin: string,
+    prediction: string,
     confidence: number
 }
 
 type APIResponse<T> = {
     status: number, 
     statusText: string,
-    data?: T
+    data?: T | AIData
     error: unknown
     loading: boolean
     executePostRequest: (dataToSend: any) => Promise<void>

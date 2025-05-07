@@ -3,7 +3,7 @@
 import { ArrowLeft, Brain } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,23 +11,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SymptomForm, SymptomFormData } from "@/components/symptom-form"
 import { PredictionResults } from "@/components/prediction-results"
 import { useCustomToast } from "@/hooks/useCustomToast"
-import { usePost } from "@/hooks/use-request"
+import { DSData, usePost } from "@/hooks/use-request"
 import { API_BASE_URL } from "@/lib/constants"
 
 export default function SymptomAnalysisPage() {
   const [activeTab, setActiveTab] = useState("input")
-  const [isPredicting, setIsPredicting] = useState(false)
   const [predictionComplete, setPredictionComplete] = useState(false);
   const { showToast } = useCustomToast();
-  const {status, statusText, data, error, loading, 
+  const {status, statusText, data, error, loading: isPredicting, 
     executePostRequest , 
     clearResponseState 
-  } = usePost(`${API_BASE_URL}/api/diagnose`, {
+  } = usePost<DSData>(`${API_BASE_URL}/api/diagnose`, {
     headers: {
       'Content-Type': 'application/json'
     }
   })
-  
+
   const [formData, setFormData] = useState<SymptomFormData>({
     age: "",
     gender: "",
@@ -71,19 +70,24 @@ export default function SymptomAnalysisPage() {
       return;
     }
 
-    setIsPredicting(true)
-
-    // Simulate prediction process
-    setTimeout(() => {
-      setIsPredicting(false)
-      setPredictionComplete(true)
-      setActiveTab("results")
-      showToast({
-        title: "Prediction complete",
-        description: "Symptom analysis has been completed successfully.",
-      })
-    }, 2000)
+    // call the API
+    executePostRequest(formData);
   }
+
+  // useEffect that listens to backend response
+  useEffect(() => {
+    if (status === 200 && activeTab !=="results") {
+      const timer = setTimeout(() => {
+        setActiveTab("results");
+        setPredictionComplete(true)
+        showToast({
+          title: "Prediction complete",
+          description: "Symptom analysis has been completed successfully.",
+        })
+      }, 0)
+      return () => clearTimeout(timer)
+    }
+  }, [isPredicting])
 
   const handleDownloadReport = () => {
     showToast({

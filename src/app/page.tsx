@@ -192,7 +192,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-2">
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Multimodal Analysis</CardTitle>
                 </CardHeader>
@@ -203,7 +203,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Symptom-Based Prediction</CardTitle>
                 </CardHeader>
@@ -214,7 +214,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Research-Backed</CardTitle>
                 </CardHeader>
@@ -224,7 +224,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Automated Preprocessing</CardTitle>
                 </CardHeader>
