@@ -48,7 +48,7 @@ export default function Home() {
                 href="/team"
                 className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
               >
-                Team
+                The Team
               </Link>
               <Link
                 href={`${RESEARCH_PAPER_LINK}`}
@@ -83,25 +83,18 @@ export default function Home() {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t">
               <Link
-                href="/about"
-                className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link
-                href="/research"
-                className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Research
-              </Link>
-              <Link
                 href="/team"
                 className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Team
+                The Team
+              </Link>
+              <Link
+                href={`${RESEARCH_PAPER_LINK}`}
+                className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Research Paper
               </Link>
               <div className="pt-2">
                 <Button
