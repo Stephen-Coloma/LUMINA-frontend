@@ -48,7 +48,7 @@ export default function Home() {
                 href="/team"
                 className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
               >
-                The Team
+                Our Team
               </Link>
               <Link
                 href={`${RESEARCH_PAPER_LINK}`}
@@ -87,7 +87,7 @@ export default function Home() {
                 className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                The Team
+                Our Team
               </Link>
               <Link
                 href={`${RESEARCH_PAPER_LINK}`}
@@ -283,13 +283,13 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center gap-4 text-sm text-black/60">
-            <Link href="/terms" className="underline underline-offset-4 hover:text-lumina-600">
+            <Link href="/#" className="underline underline-offset-4 hover:text-lumina-600">
               Terms of Service
             </Link>
-            <Link href="/privacy" className="underline underline-offset-4 hover:text-lumina-600">
+            <Link href="/#" className="underline underline-offset-4 hover:text-lumina-600">
               Privacy
             </Link>
-            <Link href="/contact" className="underline underline-offset-4 hover:text-lumina-600">
+            <Link href="/#" className="underline underline-offset-4 hover:text-lumina-600">
               Contact
             </Link>
           </div>
