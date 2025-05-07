@@ -222,19 +222,19 @@ export default function ScanAnalysisPage() {
                     <div className="flex items-end gap-2">
                       <p className="text-3xl font-bold">{data?.confidence}%</p>
                       {data?.confidence! >= 80 ? (
-                          <span className="mb-1 rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
+                          <span className="mb-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
                             Very High Confidence
                           </span>
                         ) : data?.confidence! >= 60 ? (
-                          <span className="mb-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800">
+                          <span className="mb-1 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
                             High Confidence
                           </span>
                         ) : data?.confidence! >= 40 ? (
-                          <span className="mb-1 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
+                          <span className="mb-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800">
                             Moderate Confidence
                           </span>
                         ) : (
-                          <span className="mb-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
+                          <span className="mb-1 rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
                             Low Confidence
                           </span>
                         )}

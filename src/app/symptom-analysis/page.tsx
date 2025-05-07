@@ -8,24 +8,41 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SymptomForm } from "@/components/symptom-form"
+import { SymptomForm, SymptomFormData } from "@/components/symptom-form"
 import { PredictionResults } from "@/components/prediction-results"
 import { useCustomToast } from "@/hooks/useCustomToast"
 
 export default function SymptomAnalysisPage() {
   const [activeTab, setActiveTab] = useState("input")
-  const [formData, setFormData] = useState({})
   const [isPredicting, setIsPredicting] = useState(false)
   const [predictionComplete, setPredictionComplete] = useState(false);
-  const { showToast } = useCustomToast()
+  const { showToast } = useCustomToast();
+  const [formData, setFormData] = useState<SymptomFormData>({
+    age: "",
+    gender: "",
+    smoking: false,
+    yellowFingers: false,
+    anxiety: false,
+    peerPressure: false,
+    chronicDisease: false,
+    fatigue: false,
+    allergy: false,
+    wheezing: false,
+    alcohol: false,
+    coughing: false,
+    shortnessOfBreath: false,
+    swallowingDifficulty: false,
+    chestPain: false,
+  })
 
-  const handleFormDataChange = (data: any) => {
+  const handleFormDataChange = (data: SymptomFormData) => {
     setFormData(data)
   }
 
   const handleGeneratePrediction = () => {
     // Check if at least some symptoms are selected
-    const hasSymptoms = Object.values(formData).some((value) => value === true)
+    const hasSymptoms = Object.values(formData!).some((value) => value === true);
+    const hasAgeAndGender = formData.age !== '' && formData.gender !== '';
 
     if (!hasSymptoms) {
       showToast({
@@ -33,7 +50,14 @@ export default function SymptomAnalysisPage() {
         description: "Please select at least one symptom to generate a prediction.",
         variant: "destructive",
       })
-      return
+      return;
+    }else if(!hasAgeAndGender){
+      showToast({
+        title: "Provide Age and Gender",
+        description: "Please input age and genter to generate a prediction.",
+        variant: "destructive",
+      })
+      return;
     }
 
     setIsPredicting(true)
@@ -81,7 +105,11 @@ export default function SymptomAnalysisPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-2 bg-lumina-50">
-          <TabsTrigger value="input" className="data-[state=active]:bg-lumina-600 data-[state=active]:text-white">
+          <TabsTrigger 
+            value="input" 
+            className="data-[state=active]:bg-lumina-600 data-[state=active]:text-white"
+            disabled={predictionComplete}  
+          >
             Input Symptoms
           </TabsTrigger>
           <TabsTrigger
@@ -102,7 +130,7 @@ export default function SymptomAnalysisPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <SymptomForm onFormDataChange={handleFormDataChange} />
+              <SymptomForm onFormDataChange={handleFormDataChange} initialFormData={formData} />
             </CardContent>
             <CardFooter className="flex justify-end">
               <Button
