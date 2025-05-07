@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Share2, Printer, LoaderCircle } from "lucide-react"
+import { ArrowLeft, Share2, Printer, LoaderCircle, Brain } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -13,7 +13,8 @@ import { useCustomToast } from "@/hooks/useCustomToast"
 import dicomToImage from "@/lib/dicom-parser"
 import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME, ZIPPED_SERVER_FIELD_NAME } from "@/lib/constants"
 import { generateZip } from "@/lib/zip"
-import { usePost } from "@/hooks/use-request"
+import { AIData, usePost } from "@/hooks/use-request"
+import ProcessLoader from "@/components/process-loader"
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload")
@@ -24,7 +25,7 @@ export default function ScanAnalysisPage() {
   const {status, statusText, data, error, loading: isAnalyzing,
     executePostRequest,
     clearResponseState,
-  } = usePost(`${API_BASE_URL}/api/predict`, {
+  } = usePost<AIData>(`${API_BASE_URL}/api/predict`, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -104,20 +105,6 @@ export default function ScanAnalysisPage() {
     executePostRequest(formData) // calling the api endpoint
   }
 
-  const handlePrintReport = () => {
-    showToast({
-      title: "Printing report",
-      description: "The analysis report has been sent to the printer.",
-    })
-  }
-
-  const handleShareResults = () => {
-    showToast({
-      title: "Results shared",
-      description: "A secure link to the results has been copied to your clipboard.",
-    })
-  }
-
   return (
     <div className="container py-10">
       <div className="mb-8 flex items-center gap-2">
@@ -128,7 +115,7 @@ export default function ScanAnalysisPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-2">
-          <Image src="/images/lung-logo.png" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
+          <Image src="/images/lumina-logo.svg" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
           <h1 className="text-3xl font-bold">Scan Analysis</h1>
         </div>
       </div>
@@ -177,19 +164,7 @@ export default function ScanAnalysisPage() {
           </div>
 
           {isAnalyzing ? (
-            <Card className="mt-6 border-lumina-100">
-              <CardContent className="pt-6">
-                <div className="space-y-4 text-center">
-                  <h3 className="text-lg font-semibold">Analyzing Scans</h3>
-                  <p className="text-sm text-black/60">
-                    Please wait while we analyze your scans. This may take a few minutes.
-                  </p>
-                  <div className="flex justify-center my-6">
-                    <LoaderCircle className="animate-spin" color="#00b7f5" size={40}></LoaderCircle>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ProcessLoader></ProcessLoader>
           ) : (
             <div className="mt-6 flex justify-end">
               <Button
@@ -198,6 +173,7 @@ export default function ScanAnalysisPage() {
                 disabled={isAnalyzing}
               >
                 Run Analysis
+                <Brain className="ml-2 h-4 w-4" />
               </Button>
             </div>
           )}
@@ -222,19 +198,19 @@ export default function ScanAnalysisPage() {
                     <div className="flex items-end gap-2">
                       <p className="text-3xl font-bold">{data?.confidence}%</p>
                       {data?.confidence! >= 80 ? (
-                          <span className="mb-1 rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
+                          <span className="mb-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
                             Very High Confidence
                           </span>
                         ) : data?.confidence! >= 60 ? (
-                          <span className="mb-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800">
+                          <span className="mb-1 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
                             High Confidence
                           </span>
                         ) : data?.confidence! >= 40 ? (
-                          <span className="mb-1 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
+                          <span className="mb-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800">
                             Moderate Confidence
                           </span>
                         ) : (
-                          <span className="mb-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
+                          <span className="mb-1 rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
                             Low Confidence
                           </span>
                         )}
@@ -384,20 +360,6 @@ export default function ScanAnalysisPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="outline"
-                className="border-lumina-600 text-lumina-600 hover:bg-lumina-50 gap-2"
-                onClick={handlePrintReport}
-              >
-                <Printer className="h-4 w-4" />
-                Print Report
-              </Button>
-              <Button className="bg-lumina-600 hover:bg-lumina-700 gap-2" onClick={handleShareResults}>
-                <Share2 className="h-4 w-4" />
-                Share Results
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
