@@ -1,25 +1,33 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useState } from "react";
 
-type AIData = {
+/**Data that represents the data return by backend for AI subject */
+export type AIData = {
     classification: string,
     confidence: number
 }
 
-type APIResponse = {
+// todo: to be fixed to adjust with the data science payload
+/**Data that represents the data return by backend for Data Science subject */
+export type DSData = {
+    predictoin: string,
+    confidence: number
+}
+
+type APIResponse<T> = {
     status: number, 
     statusText: string,
-    data?: AIData
+    data?: T
     error: unknown
     loading: boolean
     executePostRequest: (dataToSend: any) => Promise<void>
     clearResponseState: () => void
 }
 
-export const usePost = (url: string, options?: AxiosRequestConfig ): APIResponse => {
+export function usePost<T>(url: string, options?: AxiosRequestConfig ): APIResponse<T> {
     const [status, setStatus] = useState<number>(0);
     const [statusText, setStatusText] = useState<string>('');
-    const [data, setData] = useState<AIData>();
+    const [data, setData] = useState<T>();
     const [error, setError] = useState<unknown>(null);
     const [loading, setLoading] = useState<boolean>(false);
 

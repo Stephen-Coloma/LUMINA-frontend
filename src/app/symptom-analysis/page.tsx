@@ -11,12 +11,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SymptomForm, SymptomFormData } from "@/components/symptom-form"
 import { PredictionResults } from "@/components/prediction-results"
 import { useCustomToast } from "@/hooks/useCustomToast"
+import { usePost } from "@/hooks/use-request"
+import { API_BASE_URL } from "@/lib/constants"
 
 export default function SymptomAnalysisPage() {
   const [activeTab, setActiveTab] = useState("input")
   const [isPredicting, setIsPredicting] = useState(false)
   const [predictionComplete, setPredictionComplete] = useState(false);
   const { showToast } = useCustomToast();
+  const {status, statusText, data, error, loading, 
+    executePostRequest , 
+    clearResponseState 
+  } = usePost(`${API_BASE_URL}/api/diagnose`, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  
   const [formData, setFormData] = useState<SymptomFormData>({
     age: "",
     gender: "",
