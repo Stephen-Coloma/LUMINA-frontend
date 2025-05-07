@@ -44,22 +44,16 @@ export default function Home() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-4">
               <Link
-                href="/about"
+                href="/team"
                 className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
               >
-                About
+                Team
               </Link>
               <Link
                 href="/research"
                 className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
               >
-                Research
-              </Link>
-              <Link
-                href="/team"
-                className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
-              >
-                Team
+                Research Paper
               </Link>
               <Button
                 variant="default"

@@ -13,6 +13,7 @@ import { PredictionResults } from "@/components/prediction-results"
 import { useCustomToast } from "@/hooks/useCustomToast"
 import { DSData, usePost } from "@/hooks/use-request"
 import { API_BASE_URL } from "@/lib/constants"
+import ProcessLoader from "@/components/process-loader"
 
 export default function SymptomAnalysisPage() {
   const [activeTab, setActiveTab] = useState("input")
@@ -136,19 +137,7 @@ export default function SymptomAnalysisPage() {
           </Card>
 
           {isPredicting ? (
-            <Card className="mt-6 border-lumina-100">
-              <CardContent className="pt-6">
-                <div className="space-y-4 text-center">
-                  <h3 className="text-lg font-semibold">Predicting Symptoms</h3>
-                  <p className="text-sm text-black/60">
-                    Please wait while we analyze your symptoms. This may take a few minutes.
-                  </p>
-                  <div className="flex justify-center my-6">
-                    <LoaderCircle className="animate-spin" color="#00b7f5" size={40}></LoaderCircle>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ProcessLoader></ProcessLoader>
           ) : (
             <div className="mt-6 flex justify-end">
               <Button

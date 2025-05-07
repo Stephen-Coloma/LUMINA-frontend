@@ -14,6 +14,7 @@ import dicomToImage from "@/lib/dicom-parser"
 import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME, ZIPPED_SERVER_FIELD_NAME } from "@/lib/constants"
 import { generateZip } from "@/lib/zip"
 import { AIData, usePost } from "@/hooks/use-request"
+import ProcessLoader from "@/components/process-loader"
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload")
@@ -163,19 +164,7 @@ export default function ScanAnalysisPage() {
           </div>
 
           {isAnalyzing ? (
-            <Card className="mt-6 border-lumina-100">
-              <CardContent className="pt-6">
-                <div className="space-y-4 text-center">
-                  <h3 className="text-lg font-semibold">Analyzing Scans</h3>
-                  <p className="text-sm text-black/60">
-                    Please wait while we analyze your scans. This may take a few minutes.
-                  </p>
-                  <div className="flex justify-center my-6">
-                    <LoaderCircle className="animate-spin" color="#00b7f5" size={40}></LoaderCircle>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ProcessLoader></ProcessLoader>
           ) : (
             <div className="mt-6 flex justify-end">
               <Button
