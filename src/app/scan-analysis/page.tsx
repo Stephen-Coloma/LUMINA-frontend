@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowLeft, Brain } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 
@@ -15,6 +14,7 @@ import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME, ZIPPED_SERVER_FIELD_NAME } fro
 import { generateZip } from "@/lib/zip"
 import { AIData, usePost } from "@/hooks/use-request"
 import ProcessLoader from "@/components/process-loader"
+import {useRouter} from "next/navigation"
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload")
@@ -22,6 +22,7 @@ export default function ScanAnalysisPage() {
   const [petFiles, setPetFiles] = useState<File[]>([])
   const [analysisComplete, setAnalysisComplete] = useState(false)
   const { showToast } = useCustomToast()
+  const router = useRouter();
   const {status, data, error, loading: isAnalyzing,
     clearResponseState,
     executePostRequest,
@@ -115,15 +116,21 @@ export default function ScanAnalysisPage() {
     executePostRequest(formData) // calling the api endpoint
   }
 
+  const handleBackToHome = () => {
+    router.push("/")
+  }
+
   return (
     <div className="container py-10">
-      <div className="mb-8 flex items-center gap-2">
-        <Link href="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to home</span>
-          </Button>
-        </Link>
+      <Button
+        variant="ghost"
+        className="text-lumina-600 hover:bg-lumina-50 hover:text-lumina-700 -ml-4"
+        onClick={handleBackToHome}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Home
+      </Button>
+      <div className="my-4 flex items-center gap-2">
         <div className="flex items-center gap-2">
           <Image src="/images/lumina-logo.svg" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
           <h1 className="text-3xl font-bold">Scan Analysis</h1>
