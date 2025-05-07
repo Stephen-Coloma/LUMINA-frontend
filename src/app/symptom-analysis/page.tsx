@@ -98,7 +98,7 @@ export default function SymptomAnalysisPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-2">
-          <Image src="/images/lung-logo.png" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
+          <Image src="/images/lumina-logo.svg" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
           <h1 className="text-3xl font-bold">Symptom Analysis</h1>
         </div>
       </div>
