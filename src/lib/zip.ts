@@ -2,8 +2,8 @@ import JSZip from 'jszip';
 
 export const generateZip = (ctFiles: File[], petFiles: File[]): Promise<Blob>  => {
     const zip = new JSZip();
-    var ctFolder = zip.folder("CT");
-    var petFolder = zip.folder("PET");
+    const ctFolder = zip.folder("CT");
+    const petFolder = zip.folder("PET");
 
     // add eacc dicomm to zip
     ctFiles.forEach((file)=>{

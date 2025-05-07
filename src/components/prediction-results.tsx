@@ -175,7 +175,7 @@ export function PredictionResults() {
             Important Reminders for Lung Cancer Symptoms
           </CardTitle>
           <CardDescription>
-            What to do if you're experiencing these symptoms
+            What to do if you&#39;re experiencing these symptoms
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -195,7 +195,7 @@ export function PredictionResults() {
               <h3 className="mb-2 font-medium text-lumina-800">Quit Smoking</h3>
               <p className="text-sm text-muted-foreground">
                 If you smoke, quitting is the most important step you can take.
-                It's never too late - quitting at any age can reduce your risk
+                It&#39;s never too late - quitting at any age can reduce your risk
                 and improve your overall health.
               </p>
             </div>

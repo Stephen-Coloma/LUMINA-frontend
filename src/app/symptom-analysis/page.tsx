@@ -1,12 +1,12 @@
 "use client"
 
-import { ArrowLeft, Brain, LoaderCircle } from "lucide-react"
+import { ArrowLeft, Brain } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SymptomForm, SymptomFormData } from "@/components/symptom-form"
 import { PredictionResults } from "@/components/prediction-results"
@@ -19,9 +19,8 @@ export default function SymptomAnalysisPage() {
   const [activeTab, setActiveTab] = useState("input")
   const [predictionComplete, setPredictionComplete] = useState(false);
   const { showToast } = useCustomToast();
-  const {status, statusText, data, error, loading: isPredicting, 
+  const {status, data, error, loading: isPredicting, 
     executePostRequest , 
-    clearResponseState 
   } = usePost<DSData>(`${API_BASE_URL}/api/diagnose`, {
     headers: {
       'Content-Type': 'application/json'

@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Share2, Printer, LoaderCircle, Brain } from "lucide-react"
+import { ArrowLeft, Brain } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -22,9 +22,8 @@ export default function ScanAnalysisPage() {
   const [petFiles, setPetFiles] = useState<File[]>([])
   const [analysisComplete, setAnalysisComplete] = useState(false)
   const { showToast } = useCustomToast()
-  const {status, statusText, data, error, loading: isAnalyzing,
+  const {status, data, error, loading: isAnalyzing,
     executePostRequest,
-    clearResponseState,
   } = usePost<AIData>(`${API_BASE_URL}/api/predict`, {
     headers: {
       "Content-Type": "multipart/form-data",

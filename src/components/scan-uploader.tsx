@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import { Upload, X, FileText, ImageIcon } from "lucide-react";
+import { Upload, FileText, ImageIcon } from "lucide-react";
 import { useCustomToast } from "@/hooks/useCustomToast";
 import { MIN_SLICES } from "@/lib/constants";
 import dicomToImage from "@/lib/dicom-parser";

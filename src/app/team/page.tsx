@@ -188,7 +188,7 @@ export default function TeamPage() {
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Join Our Research</h2>
                 <p className="max-w-[600px] text-black/60 md:text-xl">
-                  Interested in collaborating with the LUMINA team? We're always looking for talented researchers and
+                  Interested in collaborating with the LUMINA team? We&#39;re always looking for talented researchers and
                   clinicians.
                 </p>
               </div>
