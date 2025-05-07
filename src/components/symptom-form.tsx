@@ -52,25 +52,26 @@ export function SymptomForm({ onFormDataChange }: SymptomFormProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="age">Age</Label>
+        <div className="flex flex-col gap-4">
+          <Label  htmlFor="age">Age</Label>
           <Input
             id="age"
-            type="number"
+            // todo: handle age validation
+            // type="number"
             placeholder="Enter age"
             value={formData.age}
             onChange={(e) => handleChange("age", e.target.value)}
-            className="border-lumina-200 focus-visible:ring-lumina-500"
+            className="border-lumina-200 focus-visible:ring-lumina-500 max-w-24 text-center over"
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="gender">Gender</Label>
+        <div className="flex flex-col gap-4">
+          <Label  htmlFor="gender">Gender</Label>
           <RadioGroup
             id="gender"
             value={formData.gender}
             onValueChange={(value) => handleChange("gender", value)}
-            className="flex space-x-4"
+            className="flex space-x-4  flex-grow"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem
