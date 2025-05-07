@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Share2, Printer, LoaderCircle } from "lucide-react"
+import { ArrowLeft, Share2, Printer, LoaderCircle, Brain } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
@@ -104,20 +104,6 @@ export default function ScanAnalysisPage() {
     executePostRequest(formData) // calling the api endpoint
   }
 
-  const handlePrintReport = () => {
-    showToast({
-      title: "Printing report",
-      description: "The analysis report has been sent to the printer.",
-    })
-  }
-
-  const handleShareResults = () => {
-    showToast({
-      title: "Results shared",
-      description: "A secure link to the results has been copied to your clipboard.",
-    })
-  }
-
   return (
     <div className="container py-10">
       <div className="mb-8 flex items-center gap-2">
@@ -198,6 +184,7 @@ export default function ScanAnalysisPage() {
                 disabled={isAnalyzing}
               >
                 Run Analysis
+                <Brain className="ml-2 h-4 w-4" />
               </Button>
             </div>
           )}
@@ -384,20 +371,6 @@ export default function ScanAnalysisPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="outline"
-                className="border-lumina-600 text-lumina-600 hover:bg-lumina-50 gap-2"
-                onClick={handlePrintReport}
-              >
-                <Printer className="h-4 w-4" />
-                Print Report
-              </Button>
-              <Button className="bg-lumina-600 hover:bg-lumina-700 gap-2" onClick={handleShareResults}>
-                <Share2 className="h-4 w-4" />
-                Share Results
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>

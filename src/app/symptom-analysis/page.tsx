@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Brain } from "lucide-react"
+import { ArrowLeft, Brain, LoaderCircle } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
@@ -89,20 +89,6 @@ export default function SymptomAnalysisPage() {
     }
   }, [isPredicting])
 
-  const handleDownloadReport = () => {
-    showToast({
-      title: "Report downloaded",
-      description: "The prediction report has been downloaded to your device.",
-    })
-  }
-
-  const handleShareResults = () => {
-    showToast({
-      title: "Results shared",
-      description: "A secure link to the results has been copied to your clipboard.",
-    })
-  }
-
   return (
     <div className="container py-10">
       <div className="mb-8 flex items-center gap-2">
@@ -147,17 +133,34 @@ export default function SymptomAnalysisPage() {
             <CardContent>
               <SymptomForm onFormDataChange={handleFormDataChange} initialFormData={formData} />
             </CardContent>
-            <CardFooter className="flex justify-end">
+          </Card>
+
+          {isPredicting ? (
+            <Card className="mt-6 border-lumina-100">
+              <CardContent className="pt-6">
+                <div className="space-y-4 text-center">
+                  <h3 className="text-lg font-semibold">Predicting Symptoms</h3>
+                  <p className="text-sm text-black/60">
+                    Please wait while we analyze your symptoms. This may take a few minutes.
+                  </p>
+                  <div className="flex justify-center my-6">
+                    <LoaderCircle className="animate-spin" color="#00b7f5" size={40}></LoaderCircle>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="mt-6 flex justify-end">
               <Button
                 className="bg-lumina-600 hover:bg-lumina-700 text-white"
                 onClick={handleGeneratePrediction}
                 disabled={isPredicting}
               >
-                {isPredicting ? "Generating..." : "Generate Prediction"}
+                Generate Prediction
                 <Brain className="ml-2 h-4 w-4" />
               </Button>
-            </CardFooter>
-          </Card>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="results" className="mt-6">
@@ -169,18 +172,6 @@ export default function SymptomAnalysisPage() {
             <CardContent>
               <PredictionResults />
             </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="outline"
-                className="border-lumina-600 text-lumina-600 hover:bg-lumina-50"
-                onClick={handleDownloadReport}
-              >
-                Download Report
-              </Button>
-              <Button className="bg-lumina-600 hover:bg-lumina-700" onClick={handleShareResults}>
-                Share Results
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>

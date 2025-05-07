@@ -17,7 +17,7 @@ export type DSData = {
 type APIResponse<T> = {
     status: number, 
     statusText: string,
-    data?: T | AIData
+    data?: T
     error: unknown
     loading: boolean
     executePostRequest: (dataToSend: any) => Promise<void>
