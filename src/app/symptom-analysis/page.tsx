@@ -20,6 +20,7 @@ export default function SymptomAnalysisPage() {
   const [predictionComplete, setPredictionComplete] = useState(false);
   const { showToast } = useCustomToast();
   const {status, data, error, loading: isPredicting, 
+    clearResponseState,
     executePostRequest , 
   } = usePost<DSData>(`${API_BASE_URL}/api/diagnose`, {
     headers: {
@@ -94,6 +95,7 @@ export default function SymptomAnalysisPage() {
         description: "Something went wrong. Please try again later.",
         variant: 'destructive'
       })
+      clearResponseState();
       return
     }
   }, [isPredicting])
