@@ -23,6 +23,7 @@ export default function ScanAnalysisPage() {
   const [analysisComplete, setAnalysisComplete] = useState(false)
   const { showToast } = useCustomToast()
   const {status, data, error, loading: isAnalyzing,
+    clearResponseState,
     executePostRequest,
   } = usePost<AIData>(`${API_BASE_URL}/api/predict`, {
     headers: {
@@ -57,6 +58,7 @@ export default function ScanAnalysisPage() {
         description: "Something went wrong. Please try again later.",
         variant: 'destructive'
       })
+      clearResponseState();
       return;
     }
   }, [isAnalyzing])
