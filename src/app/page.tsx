@@ -8,6 +8,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { RESEARCH_PAPER_LINK } from "@/lib/constants"
 
 export default function Home() {
   const router = useRouter()
@@ -37,29 +38,24 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
           <div className="flex gap-2 items-center text-lumina-600">
-            <Image src="/images/lung-logo.png" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
+            <Image src="/images/lumina-logo.svg" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
             <span className="text-xl font-bold">LUMINA</span>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-4">
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-4">
               <Link
-                href="/about"
-                className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
-              >
-                About
-              </Link>
-              <Link
-                href="/research"
-                className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
-              >
-                Research
-              </Link>
-              <Link
                 href="/team"
                 className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
               >
-                Team
+                The Team
+              </Link>
+              <Link
+                href={`${RESEARCH_PAPER_LINK}`}
+                target="_blank"
+                className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
+              >
+                Research Paper
               </Link>
               <Button
                 variant="default"
@@ -87,25 +83,18 @@ export default function Home() {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t">
               <Link
-                href="/about"
-                className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link
-                href="/research"
-                className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Research
-              </Link>
-              <Link
                 href="/team"
                 className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Team
+                The Team
+              </Link>
+              <Link
+                href={`${RESEARCH_PAPER_LINK}`}
+                className="block px-3 py-2 rounded-md text-base font-medium text-black/60 hover:text-lumina-600 hover:bg-lumina-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Research Paper
               </Link>
               <div className="pt-2">
                 <Button
@@ -137,7 +126,7 @@ export default function Home() {
         )}
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+        <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
@@ -167,11 +156,11 @@ export default function Home() {
               </div>
               <div className="flex items-center justify-center w-full">
                 <Image
-                  src="/images/lung-logo.png"
+                  src="/images/lumina-logo.svg"
                   width={600}
                   height={600}
                   alt="LUMINA Lung Cancer Analysis"
-                  className="w-full max-w-[600px] h-auto"
+                  className="w-full max-w-[400px] h-auto"
                 />
               </div>
             </div>
@@ -192,7 +181,7 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-2">
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Multimodal Analysis</CardTitle>
                 </CardHeader>
@@ -203,7 +192,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Symptom-Based Prediction</CardTitle>
                 </CardHeader>
@@ -214,7 +203,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Research-Backed</CardTitle>
                 </CardHeader>
@@ -224,7 +213,7 @@ export default function Home() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="border-lumina-100">
+              <Card className="border-lumina-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Automated Preprocessing</CardTitle>
                 </CardHeader>
@@ -288,7 +277,7 @@ export default function Home() {
       <footer className="w-full border-t py-6 md:py-0 bg-lumina-50">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
           <div className="flex items-center gap-2">
-            <Image src="/images/lung-logo.png" width={24} height={24} alt="LUMINA logo" className="h-6 w-auto" />
+            <Image src="/images/lumina-logo.svg" width={24} height={24} alt="LUMINA logo" className="h-6 w-auto" />
             <p className="text-center text-sm leading-loose text-black/60 md:text-left">
               © 2025 LUMINA. All rights reserved.
             </p>
