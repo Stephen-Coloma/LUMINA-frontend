@@ -8,6 +8,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { RESEARCH_PAPER_LINK } from "@/lib/constants"
 
 export default function Home() {
   const router = useRouter()
@@ -50,7 +51,8 @@ export default function Home() {
                 Team
               </Link>
               <Link
-                href="/research"
+                href={`${RESEARCH_PAPER_LINK}`}
+                target="_blank"
                 className="px-3 py-2 text-sm font-medium text-black/60 transition-colors hover:text-lumina-600 hover:bg-lumina-50 rounded-md"
               >
                 Research Paper
