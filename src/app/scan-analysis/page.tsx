@@ -100,7 +100,7 @@ export default function ScanAnalysisPage() {
   }, [petFiles, currentPetImageIndex])
 
   const handleRunAnalysis = async () => {
-    if (ctFiles.length < 32 || petFiles.length < 32) {
+    if (ctFiles.length < MIN_SLICES || petFiles.length < MIN_SLICES) {
       showToast({
         title: "Not enough files",
         description: "Please upload at least 32 CT and PET scan files to continue.",
