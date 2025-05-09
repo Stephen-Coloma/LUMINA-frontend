@@ -10,11 +10,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScanUploader } from "@/components/scan-uploader"
 import { useCustomToast } from "@/hooks/useCustomToast"
 import dicomToImage from "@/lib/dicom-parser"
-import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME, ZIPPED_SERVER_FIELD_NAME } from "@/lib/constants"
+import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME } from "@/lib/constants"
 import { generateZip } from "@/lib/zip"
 import { AIData, usePost } from "@/hooks/use-request"
 import ProcessLoader from "@/components/process-loader"
 import {useRouter} from "next/navigation"
+import { saveAs } from "file-saver"
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload")
@@ -111,7 +112,7 @@ export default function ScanAnalysisPage() {
     const zipBlob = await generateZip(ctFiles, petFiles);
 
     const formData = new FormData()
-    formData.append(ZIPPED_SERVER_FIELD_NAME, zipBlob, ZIP_FILE_NAME) // 'zippedDicom' is the server field name
+    formData.append('file', zipBlob, ZIP_FILE_NAME) // 'zippedDicom' is the server field name
 
     executePostRequest(formData) // calling the api endpoint
   }
@@ -213,16 +214,16 @@ export default function ScanAnalysisPage() {
                   <div>
                     <p className="text-sm text-black/60">Confidence Level:</p>
                     <div className="flex items-end gap-2">
-                      <p className="text-3xl font-bold">{data?.confidence}%</p>
-                      {data?.confidence! >= 80 ? (
+                      <p className="text-3xl font-bold">{Math.floor(data?.confidence! * 100).toFixed(2)}%</p>
+                      {data?.confidence! * 100 >= 80 ? (
                           <span className="mb-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
                             Very High Confidence
                           </span>
-                        ) : data?.confidence! >= 60 ? (
+                        ) : data?.confidence! * 100 >= 60 ? (
                           <span className="mb-1 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
                             High Confidence
                           </span>
-                        ) : data?.confidence! >= 40 ? (
+                        ) : data?.confidence! * 100 >= 40 ? (
                           <span className="mb-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800">
                             Moderate Confidence
                           </span>
