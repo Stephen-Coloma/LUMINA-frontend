@@ -1,5 +1,4 @@
-// export const API_BASE_URL =  `http://${process.env.NEXT_PUBLIC_SERVER_HOST}`;
-export const API_BASE_URL = `http://localhost:8000`;
+export const API_BASE_URL =  `http://${process.env.NEXT_PUBLIC_SERVER_HOST}`;
 
 export const MIN_SLICES = 15; // minimum number of slices from user input
 

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/lib/constants";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useState } from "react";
 
