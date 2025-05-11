@@ -15,7 +15,6 @@ import { generateZip } from "@/lib/zip"
 import { AIData, usePost } from "@/hooks/use-request"
 import ProcessLoader from "@/components/process-loader"
 import {useRouter} from "next/navigation"
-import { saveAs } from "file-saver"
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload")
