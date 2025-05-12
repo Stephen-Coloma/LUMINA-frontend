@@ -26,15 +26,22 @@ const top10Predictor = [
 export function PredictionResults({prediction, confidence}: DSData) {
   return (
     <div className="space-y-6">
-      <Alert variant="default" className="relative border-lumina-600/50 bg-lumina-50">
-        <Info className="absolute h-4 w-4 text-lumina-600" />
+      <Alert variant="default" className=" border-lumina-600/50 bg-lumina-50">
+        <Info className=" h-4 w-4 text-lumina-600" />
         <AlertTitle>Prediction Result</AlertTitle>
-        <AlertTitle className="flex flex-col md:flex-row items-center justify-between gap-2">
-          <span className="text-center text-lg font-bold leading-none">
-            {`${(confidence * 100).toFixed(2)}% chance of ${prediction === 1 ? 'Lung Cancer' : 'No Lung Cancer'}`}
+        
+        <AlertTitle className="flex flex-col md:flex-row gap-2 items-center justify-between px-7">
+          <span
+            className={`text-center text-lg font-bold ${
+              prediction === 1 ? 'text-red-500' : 'text-green-600'
+            }`}
+          >
+            {`${(confidence * 100).toFixed(2)}% chance of ${
+              prediction === 1 ? 'Lung Cancer' : 'No Lung Cancer'
+            }`}
           </span>
           <span
-            className={`text-center rounded-full px-2 py-1 text-xs font-medium leading-none ${
+            className={`w-fit rounded-full p-2 text-xs font-medium leading-none ${
               prediction === 1
                 ? confidence * 100 >= 80
                   ? 'bg-red-100 text-red-800'
