@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowLeft, Brain } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 
@@ -14,11 +13,13 @@ import { useCustomToast } from "@/hooks/useCustomToast"
 import { DSData, usePost } from "@/hooks/use-request"
 import { API_BASE_URL } from "@/lib/constants"
 import ProcessLoader from "@/components/process-loader"
+import { useRouter } from "next/navigation"
 
 export default function SymptomAnalysisPage() {
   const [activeTab, setActiveTab] = useState("input")
   const [predictionComplete, setPredictionComplete] = useState(false);
   const { showToast } = useCustomToast();
+  const router = useRouter();
   const {status, data, error, loading: isPredicting, 
     clearResponseState,
     executePostRequest , 
@@ -100,15 +101,21 @@ export default function SymptomAnalysisPage() {
     }
   }, [isPredicting])
 
+  const handleBackToHome = () => {
+    router.push("/")
+  }
+
   return (
     <div className="container py-10">
-      <div className="mb-8 flex items-center gap-2">
-        <Link href="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to home</span>
-          </Button>
-        </Link>
+      <Button
+        variant="ghost"
+        className="text-lumina-600 hover:bg-lumina-50 hover:text-lumina-700 -ml-4"
+        onClick={handleBackToHome}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Home
+      </Button>
+      <div className="my-4 flex items-center gap-2">
         <div className="flex items-center gap-2">
           <Image src="/images/lumina-logo.svg" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
           <h1 className="text-3xl font-bold">Symptom Analysis</h1>
@@ -169,7 +176,7 @@ export default function SymptomAnalysisPage() {
               <CardDescription>Logistic regression model prediction based on symptom analysis</CardDescription>
             </CardHeader>
             <CardContent>
-              <PredictionResults />
+              <PredictionResults {...data!}/>
             </CardContent>
           </Card>
         </TabsContent>

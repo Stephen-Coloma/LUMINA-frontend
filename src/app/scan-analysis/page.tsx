@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowLeft, Brain } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 
@@ -11,10 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScanUploader } from "@/components/scan-uploader"
 import { useCustomToast } from "@/hooks/useCustomToast"
 import dicomToImage from "@/lib/dicom-parser"
-import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME, ZIPPED_SERVER_FIELD_NAME } from "@/lib/constants"
+import { API_BASE_URL, MIN_SLICES, ZIP_FILE_NAME } from "@/lib/constants"
 import { generateZip } from "@/lib/zip"
 import { AIData, usePost } from "@/hooks/use-request"
 import ProcessLoader from "@/components/process-loader"
+import {useRouter} from "next/navigation"
 
 export default function ScanAnalysisPage() {
   const [activeTab, setActiveTab] = useState("upload")
@@ -22,6 +22,7 @@ export default function ScanAnalysisPage() {
   const [petFiles, setPetFiles] = useState<File[]>([])
   const [analysisComplete, setAnalysisComplete] = useState(false)
   const { showToast } = useCustomToast()
+  const router = useRouter();
   const {status, data, error, loading: isAnalyzing,
     clearResponseState,
     executePostRequest,
@@ -98,7 +99,7 @@ export default function ScanAnalysisPage() {
   }, [petFiles, currentPetImageIndex])
 
   const handleRunAnalysis = async () => {
-    if (ctFiles.length < 32 || petFiles.length < 32) {
+    if (ctFiles.length < MIN_SLICES || petFiles.length < MIN_SLICES) {
       showToast({
         title: "Not enough files",
         description: "Please upload at least 32 CT and PET scan files to continue.",
@@ -110,20 +111,26 @@ export default function ScanAnalysisPage() {
     const zipBlob = await generateZip(ctFiles, petFiles);
 
     const formData = new FormData()
-    formData.append(ZIPPED_SERVER_FIELD_NAME, zipBlob, ZIP_FILE_NAME) // 'zippedDicom' is the server field name
+    formData.append('file', zipBlob, ZIP_FILE_NAME) // 'zippedDicom' is the server field name
 
     executePostRequest(formData) // calling the api endpoint
   }
 
+  const handleBackToHome = () => {
+    router.push("/")
+  }
+
   return (
     <div className="container py-10">
-      <div className="mb-8 flex items-center gap-2">
-        <Link href="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to home</span>
-          </Button>
-        </Link>
+      <Button
+        variant="ghost"
+        className="text-lumina-600 hover:bg-lumina-50 hover:text-lumina-700 -ml-4"
+        onClick={handleBackToHome}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Home
+      </Button>
+      <div className="my-4 flex items-center gap-2">
         <div className="flex items-center gap-2">
           <Image src="/images/lumina-logo.svg" width={32} height={32} alt="LUMINA logo" className="h-8 w-auto" />
           <h1 className="text-3xl font-bold">Scan Analysis</h1>
@@ -206,16 +213,16 @@ export default function ScanAnalysisPage() {
                   <div>
                     <p className="text-sm text-black/60">Confidence Level:</p>
                     <div className="flex items-end gap-2">
-                      <p className="text-3xl font-bold">{data?.confidence}%</p>
-                      {data?.confidence! >= 80 ? (
+                      <p className="text-3xl font-bold">{Math.floor(data?.confidence! * 100).toFixed(2)}%</p>
+                      {data?.confidence! * 100 >= 80 ? (
                           <span className="mb-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
                             Very High Confidence
                           </span>
-                        ) : data?.confidence! >= 60 ? (
+                        ) : data?.confidence! * 100 >= 60 ? (
                           <span className="mb-1 rounded-full bg-teal-100 px-2 py-1 text-xs font-medium text-teal-800">
                             High Confidence
                           </span>
-                        ) : data?.confidence! >= 40 ? (
+                        ) : data?.confidence! * 100 >= 40 ? (
                           <span className="mb-1 rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800">
                             Moderate Confidence
                           </span>
