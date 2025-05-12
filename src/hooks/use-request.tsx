@@ -7,10 +7,9 @@ export type AIData = {
     confidence: number
 }
 
-// todo: to be fixed to adjust with the data science payload
 /**Data that represents the data return by backend for Data Science subject */
 export type DSData = {
-    prediction: string,
+    prediction: number,
     confidence: number
 }
 

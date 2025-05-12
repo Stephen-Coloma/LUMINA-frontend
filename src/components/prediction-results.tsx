@@ -8,35 +8,59 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DSData } from "@/hooks/use-request";
 
-export function PredictionResults() {
-  // Sample data for feature importance
-  const featureImportanceData = [
-    { name: "Smoking", value: 0.85 },
-    { name: "Shortness of Breath", value: 0.78 },
-    { name: "Chest Pain", value: 0.72 },
-    { name: "Coughing", value: 0.65 },
-    { name: "Yellow Fingers", value: 0.58 },
-    { name: "Fatigue", value: 0.52 },
-    { name: "Age", value: 0.48 },
-    { name: "Wheezing", value: 0.45 },
-    { name: "Chronic Disease", value: 0.42 },
-    { name: "Swallowing Difficulty", value: 0.38 },
-  ].sort((a, b) => b.value - a.value);
+const top10Predictor = [
+  'Couging',
+  'Chronic Disease',
+  'Fatigue',
+  'Allergy',
+  'Swallowing Difficulty',
+  'Smoking',
+  'Yellow Fingers',
+  'Wheezing',
+  'Anxiety',
+  'Shortness of Breath',
+]
 
+export function PredictionResults({prediction, confidence}: DSData) {
   return (
     <div className="space-y-6">
-      <Alert variant="default" className="border-lumina-600/50 bg-lumina-50">
-        <Info className="h-4 w-4 text-lumina-600" />
+      <Alert variant="default" className="relative border-lumina-600/50 bg-lumina-50">
+        <Info className="absolute h-4 w-4 text-lumina-600" />
         <AlertTitle>Prediction Result</AlertTitle>
-        <AlertDescription className="flex items-center gap-2">
-          <span className="text-lg font-bold">
-            78% probability of lung cancer
+        <AlertTitle className="flex flex-col md:flex-row items-center justify-between gap-2">
+          <span className="text-center text-lg font-bold leading-none">
+            {`${(confidence * 100).toFixed(2)}% chance of ${prediction === 1 ? 'Lung Cancer' : 'No Lung Cancer'}`}
           </span>
-          <span className="rounded-full bg-lumina-100 px-2 py-1 text-xs font-medium text-lumina-800">
-            High Risk
+          <span
+            className={`text-center rounded-full px-2 py-1 text-xs font-medium leading-none ${
+              prediction === 1
+                ? confidence * 100 >= 80
+                  ? 'bg-red-100 text-red-800'
+                  : confidence * 100 >= 60
+                  ? 'bg-orange-100 text-orange-800'
+                  : confidence * 100 >= 40
+                  ? 'bg-yellow-100 text-yellow-800'
+                  : 'bg-amber-100 text-amber-800'
+                : confidence * 100 >= 80
+                ? 'bg-green-100 text-green-800'
+                : confidence * 100 >= 60
+                ? 'bg-teal-100 text-teal-800'
+                : confidence * 100 >= 40
+                ? 'bg-blue-100 text-blue-800'
+                : 'bg-gray-100 text-gray-800'
+            }`}
+          >
+            {confidence * 100 >= 80
+              ? 'Very High Confidence'
+              : confidence * 100 >= 60
+              ? 'High Confidence'
+              : confidence * 100 >= 40
+              ? 'Moderate Confidence'
+              : 'Low Confidence'}
           </span>
-        </AlertDescription>
+        </AlertTitle>
       </Alert>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -51,55 +75,14 @@ export function PredictionResults() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <div className="flex items-center justify-between border-b border-lumina-100 pb-2">
-                <div className="flex items-center gap-2">
+              {top10Predictor.map((predictor, index) => (
+                <div key={index} className="flex items-center justify-between border-b border-lumina-100 pb-2 text-black/70">
+                  <span className="font-medium">{predictor}</span>
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lumina-100 text-xs font-medium text-lumina-800">
-                    1
+                    {index+1}
                   </span>
-                  <span className="font-medium">Smoking</span>
                 </div>
-                <span className="font-medium text-lumina-600">85%</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-lumina-100 pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lumina-100 text-xs font-medium text-lumina-800">
-                    2
-                  </span>
-                  <span className="font-medium">Shortness of Breath</span>
-                </div>
-                <span className="font-medium text-lumina-600">78%</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-lumina-100 pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lumina-100 text-xs font-medium text-lumina-800">
-                    3
-                  </span>
-                  <span className="font-medium">Chest Pain</span>
-                </div>
-                <span className="font-medium text-lumina-600">72%</span>
-              </div>
-
-              <div className="flex items-center justify-between border-b border-lumina-100 pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lumina-100 text-xs font-medium text-lumina-800">
-                    4
-                  </span>
-                  <span className="font-medium">Coughing</span>
-                </div>
-                <span className="font-medium text-lumina-600">65%</span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-lumina-100 text-xs font-medium text-lumina-800">
-                    5
-                  </span>
-                  <span className="font-medium">Fatigue</span>
-                </div>
-                <span className="font-medium text-lumina-600">52%</span>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -118,7 +101,7 @@ export function PredictionResults() {
                   <AlertCircle className="mt-0.5 h-4 w-4 text-lumina-600" />
                   <div>
                     <p className="font-medium">Smoking History</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground  text-black/70">
                       Smoking is the leading cause of lung cancer, responsible
                       for about 85% of cases.
                     </p>
@@ -131,7 +114,7 @@ export function PredictionResults() {
                   <AlertCircle className="mt-0.5 h-4 w-4 text-lumina-600" />
                   <div>
                     <p className="font-medium">Respiratory Symptoms</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground  text-black/70">
                       Shortness of breath, chest pain, and persistent coughing
                       are common symptoms of lung cancer.
                     </p>
@@ -144,7 +127,7 @@ export function PredictionResults() {
                   <AlertCircle className="mt-0.5 h-4 w-4 text-lumina-600" />
                   <div>
                     <p className="font-medium">Age Factor</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground text-black/70">
                       The risk of lung cancer increases with age, with most
                       cases diagnosed in people aged 65 or older.
                     </p>
@@ -157,7 +140,7 @@ export function PredictionResults() {
                   <CheckCircle className="mt-0.5 h-4 w-4 text-lumina-600" />
                   <div>
                     <p className="font-medium">Recommended Action</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground text-black/70">
                       Based on these risk factors, further diagnostic imaging is
                       recommended. Consider CT or PET scanning.
                     </p>
@@ -184,7 +167,7 @@ export function PredictionResults() {
               <h3 className="mb-2 font-medium text-lumina-800">
                 Seek Medical Attention
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-black/70">
                 If you experience persistent coughing, shortness of breath,
                 chest pain, or coughing up blood, consult a healthcare provider
                 immediately. Early detection significantly improves outcomes.
@@ -193,7 +176,7 @@ export function PredictionResults() {
 
             <div className="rounded-lg border border-lumina-100 bg-lumina-50 p-4">
               <h3 className="mb-2 font-medium text-lumina-800">Quit Smoking</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-black/70">
                 If you smoke, quitting is the most important step you can take.
                 It&#39;s never too late - quitting at any age can reduce your risk
                 and improve your overall health.
@@ -204,7 +187,7 @@ export function PredictionResults() {
               <h3 className="mb-2 font-medium text-lumina-800">
                 Know Your Risk Factors
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-black/70">
                 Family history, exposure to radon, asbestos, or air pollution
                 can increase your risk. Discuss these with your doctor to
                 determine if you need regular screening.
@@ -215,7 +198,7 @@ export function PredictionResults() {
               <h3 className="mb-2 font-medium text-lumina-800">
                 Track Your Symptoms
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-black/70">
                 Keep a record of when symptoms occur, their severity, and any
                 factors that make them better or worse. This information will
                 help your healthcare provider make an accurate diagnosis.

@@ -176,7 +176,7 @@ export default function SymptomAnalysisPage() {
               <CardDescription>Logistic regression model prediction based on symptom analysis</CardDescription>
             </CardHeader>
             <CardContent>
-              <PredictionResults />
+              <PredictionResults {...data!}/>
             </CardContent>
           </Card>
         </TabsContent>
