@@ -8,7 +8,7 @@ This is part of our final project for on Artificcial Intelligence and Data Scien
 ---
 
 ## 🚀 Agent in Action
-### Check this out: [Demo Video](./demo/demo.mp4)
+### Check this out: [Demo Video](https://youtu.be/E5FFvdfVPn0)
 
 ## 📌 Features
 
