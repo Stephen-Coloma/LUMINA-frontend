@@ -38,7 +38,7 @@ pnpm install
 bun install
 ```
 
-### 🏃‍♂️ Run the development server: 
+### 🏃‍♂️ Run the development server then open http://localhost:3000 
 
 ```bash
 npm run dev
