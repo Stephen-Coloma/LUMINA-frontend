@@ -8,7 +8,7 @@ This is part of our final project for on Artificcial Intelligence and Data Scien
 ---
 
 ## 🚀 Agent in Action
-### Check this out: [Demo Video](./demo/demo.mp4)
+### Check this out: [Demo Video](https://youtu.be/E5FFvdfVPn0)
 
 ## 📌 Features
 
@@ -38,7 +38,7 @@ pnpm install
 bun install
 ```
 
-### 🏃‍♂️ Run the development server: 
+### 🏃‍♂️ Run the development server then open http://localhost:3000 
 
 ```bash
 npm run dev
