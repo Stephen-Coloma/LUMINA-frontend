@@ -86,7 +86,7 @@ bun dev
 ## 💻 Developers
 1. BALOGO, Renuel Jeremi V.  
 2. COLOMA, Stephen M.
-3. GUZNMAN, Sanchie Earl M.
+3. GUZMAN, Sanchie Earl M.
 4. LEUNG, Leonhard T.
 5. NONATO, Marius Glenn M.
 6. RAGUDOS, Hannah T.
